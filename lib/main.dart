@@ -55,7 +55,9 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   int _counter = 0;
-  int _myThreshold=12;
+  int _myThreshold = 12;
+  int _resetCount = 0;
+
   void _incrementCounter() {
     setState(() {
       // This call to setState tells the Flutter framework that something has
@@ -70,6 +72,9 @@ class _MyHomePageState extends State<MyHomePage> {
   void _reset() {
     setState(() {
       _counter = 0;
+    });
+    setState(() {
+      _resetCount++;
     });
   }
 
@@ -115,13 +120,16 @@ class _MyHomePageState extends State<MyHomePage> {
               '$_counter',
               style: Theme.of(context).textTheme.headlineMedium,
             ),
-            if (_counter >= _myThreshold) const Text("You're on a roll!",
-              style:TextStyle(color: Colors.green)),
-            
+            Text('Resets used: $_resetCount'),
+            if (_counter >= _myThreshold)
+              const Text(
+                "You're on a roll!",
+                style: TextStyle(color: Colors.green),
+              ),
           ],
         ),
       ),
-           floatingActionButton: Row(
+      floatingActionButton: Row(
         mainAxisAlignment: MainAxisAlignment.end,
         children: [
           FloatingActionButton(
