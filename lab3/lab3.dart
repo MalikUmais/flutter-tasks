@@ -46,12 +46,12 @@ class MenuItem {
   MenuItem.fromString(String text)
     : name = text.split(':')[0],
       price = int.parse(text.split(':')[1]);
-    
+
   //task 8.1
   @override
-  String toString()=>'$name (Rs $price)';
-
+  String toString() => '$name (Rs $price)';
 }
+
 //task 8.2
 List<MenuItem> buildMenu() {
   return [
@@ -61,6 +61,7 @@ List<MenuItem> buildMenu() {
       ),
   ];
 }
+
 //task 4.1
 class OrderLog {
   //_ is used with instance and internal to make them private within the class. bu this they cannot be accessed outside the class
@@ -102,7 +103,8 @@ class StudentCard {
   StudentCard(this.owner) : _balance = 0;
   int get balance => _balance;
   // TODO: set balance(int v) { ... }
-  set balance(int v){//setter can thorw exception instead of silently clamping bad value 
+  set balance(int v) {
+    //setter can thorw exception instead of silently clamping bad value
     if (v < 0) {
       _balance = 0;
     } else if (v > balanceCap) {
@@ -112,30 +114,30 @@ class StudentCard {
     }
   }
 }
+
 //task 9.1
 List<OrderLine> buildReceipt() {
   List<MenuItem> items = buildMenu();
 
-  return [
-    for (int k = 0; k < 3; k++)
-      OrderLine(items[k], 1 + (t + k) % 4),
-  ];
+  return [for (int k = 0; k < 3; k++) OrderLine(items[k], 1 + (t + k) % 4)];
 }
+
 //task 10.1
 class Coupon {
-static final Map<String, Coupon> _cache = {};
-final String code;
-final int percent;
-final int minSpend;
-// main constructor Coupon(this.code, this.percent):
-// initializer list: minSpend = percent * 70
-// assert that percent is between 1 and 50 (inclusive)
-// factory Coupon.fromCode(String code): return the coupon stored in
-// _cache for this code; if there is none, create Coupon(code, couponPercent),
-// store it, and return it (hint: _cache.putIfAbsent)
-// int discountOn(int amount): if amount >= minSpend return
-// amount * percent ~/ 100, otherwise return 0
+  // static final Map<String, Coupon> _cache = {};
+  // final String code;
+  // final int percent;
+  // final int minSpend;
+  // main constructor Coupon(this.code, this.percent):
+  // initializer list: minSpend = percent * 70
+  // assert that percent is between 1 and 50 (inclusive)
+  // factory Coupon.fromCode(String code): return the coupon stored in
+  // _cache for this code; if there is none, create Coupon(code, couponPercent),
+  // store it, and return it (hint: _cache.putIfAbsent)
+  // int discountOn(int amount): if amount >= minSpend return
+  // amount * percent ~/ 100, otherwise return 0
 }
+
 // ===========================================================================
 void main() {
   print('Seed: $seed (t=$t, u=$u)');
@@ -235,13 +237,13 @@ void step7() {
   //task 7.2
   print('--- Step 7 ---');
   StudentCard card = StudentCard('S$seed');
-  card.balance=seed*10+50;
+  card.balance = seed * 10 + 50;
   print('Step 7: topped up->${card.balance}');
-  card.balance=-seed-1;
+  card.balance = -seed - 1;
   print('Step 7: bad value->${card.balance}');
-  card.balance=balanceCap-u;
+  card.balance = balanceCap - u;
   print('Step 7: reset->${card.balance}');
-  card.balance=card.balance-mainOrder().grand;
+  card.balance = card.balance - mainOrder().grand;
   print('Step 7: paid order->${card.balance}');
 }
 
@@ -250,14 +252,9 @@ void step8() {
   print('--- Step 8 ---');
   List<MenuItem> items = buildMenu();
 
-  MenuItem expensive = items.reduce(
-    (a, b) => a.price > b.price ? a : b,
-  );
+  MenuItem expensive = items.reduce((a, b) => a.price > b.price ? a : b);
 
-  int sum = items.fold(
-    0,
-    (total, item) => total + item.price,
-  );
+  int sum = items.fold(0, (total, item) => total + item.price);
 
   print('Step 8: menu = $items');
   print('Step 8: priciest = ${expensive.name}');
@@ -268,13 +265,13 @@ void step9() {
   //task 9.2
   print('--- Step 9 ---');
   List<OrderLine> receipt = buildReceipt();
-  int receiptTotal =0;
+  int receiptTotal = 0;
   for (OrderLine line in receipt) {
     print('Step 9: ${line.label} = ${line.grand}');
     OrderLog().add('receipt: ${line.label}');
-    receiptTotal += line.grand;  
+    receiptTotal += line.grand;
   }
-print('Step 9: receipt total = $receiptTotal');
+  print('Step 9: receipt total = $receiptTotal');
   print('Step 9: log size = ${OrderLog().entries.length}');
 }
 
