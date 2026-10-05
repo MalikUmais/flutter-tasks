@@ -30,6 +30,17 @@ class Dish{
   late int price;
 
 }
+//task 2.1
+class MenuItem{
+  String name;
+  int price;
+  MenuItem(this.name,this.price){
+    //task2.2
+    if(this.price<priceFloor){
+      this.price = priceFloor;
+    }
+  }
+}
 // ===========================================================================
 void main() {
   print('Seed: $seed (t=$t, u=$u)');
@@ -61,7 +72,12 @@ void step1() {
 }
 
 void step2() {
+  //task 2.3
+  MenuItem a = MenuItem(menu[u], priceOf(u));
+  MenuItem b = MenuItem('Test Special', 15*u);
   print('--- Step 2 ---');
+  print('Step 2: ${a.name} Rs ${a.price}');
+  print('Test Special Rs ${b.price}');//final use to set value only once but here we are changing it again if its below the priceFloor so we are using it for that 
 }
 
 void step3() {
