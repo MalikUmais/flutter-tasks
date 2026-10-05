@@ -112,19 +112,27 @@ class StudentCard {
     }
   }
 }
+//task 9.1
+List<OrderLine> buildReceipt() {
+  List<MenuItem> items = buildMenu();
 
+  return [
+    for (int k = 0; k < 3; k++)
+      OrderLine(items[k], 1 + (t + k) % 4),
+  ];
+}
 // ===========================================================================
 void main() {
   print('Seed: $seed (t=$t, u=$u)');
   // step1();
   // step2();
   // step3();
-  // step4();
+  step4();
   // step5();
   // step6();
   // step7();
-  step8();
-  // step9();
+  // step8();
+  step9();
   // step10();
 }
 
@@ -242,7 +250,17 @@ void step8() {
 }
 
 void step9() {
+  //task 9.2
   print('--- Step 9 ---');
+  List<OrderLine> receipt = buildReceipt();
+  int receiptTotal =0;
+  for (OrderLine line in receipt) {
+    print('Step 9: ${line.label} = ${line.grand}');
+    OrderLog().add('receipt: ${line.label}');
+    receiptTotal += line.grand;  
+  }
+print('Step 9: receipt total = $receiptTotal');
+  print('Step 9: log size = ${OrderLog().entries.length}');
 }
 
 void step10() {
