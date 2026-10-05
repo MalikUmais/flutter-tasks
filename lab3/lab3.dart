@@ -25,46 +25,68 @@ final int balanceCap = 600 + 20 * t;
 final int couponPercent = 5 + t + u;
 
 //task 1.1
-class Dish{
+class Dish {
   late String name;
   late int price;
-
 }
+
 //task 2.1
-class MenuItem{
+class MenuItem {
   String name;
   int price;
-  MenuItem(this.name,this.price){
+  MenuItem(this.name, this.price) {
     //task2.2
-    if(this.price<priceFloor){
+    if (this.price < priceFloor) {
       this.price = priceFloor;
     }
   }
   //task 3.1
-  MenuItem.free(this.name):price = 0;
+  MenuItem.free(this.name) : price = 0;
   //task 3.2
-  MenuItem.fromString(String text):name=text.split(':')[0], price=int.parse(text.split(':')[1]);
-
+  MenuItem.fromString(String text)
+    : name = text.split(':')[0],
+      price = int.parse(text.split(':')[1]);
 }
+
 //task 4.1
 class OrderLog {
-  //_ is used with instance and internal to make them private within the class. bu this they cannot be accessed outside the class 
-static OrderLog? _instance;
-final List<String> entries = [];
-OrderLog._internal(); // private named constructor
-// TODO: factory OrderLog() { ... } // always the same object
-factory OrderLog() {
+  //_ is used with instance and internal to make them private within the class. bu this they cannot be accessed outside the class
+  static OrderLog? _instance;
+  final List<String> entries = [];
+  OrderLog._internal(); // private named constructor
+  // TODO: factory OrderLog() { ... } // always the same object
+  factory OrderLog() {
     return _instance ??= OrderLog._internal();
   }
-void add(String msg) => entries.add(msg);
+  void add(String msg) => entries.add(msg);
+}
+
+//task 5.1
+class OrderLine{
+  final MenuItem item;
+  final int qty;
+  final int total;
+  final int tax;
+  OrderLine(this.item,this.qty)
+    : total = item.price * qty,
+      tax = (item.price * qty) * taxPercent ~/ 100,//error for using total is because we cant we use it while its not been initialized yet in the initializer list
+      assert(qty > 0, 'qty must be positive');
+
+}
+//task 5.2
+OrderLine mainOrder() {
+  return OrderLine(
+    MenuItem(menu[u], priceOf(u)),
+    2 + (t + u) % 5,
+  );
 }
 // ===========================================================================
 void main() {
   print('Seed: $seed (t=$t, u=$u)');
-  step1();
-  step2();
-  step3();
-  step4();
+  // step1();
+  // step2();
+  // step3();
+  // step4();
   step5();
   step6();
   step7();
@@ -79,10 +101,10 @@ void step1() {
   item1.name = menu[u];
   item1.price = priceOf(u);
   Dish item2 = Dish();
-  item2.name = menu[(u+1)%10];
-  item2.price = priceOf((u+1)%10);
+  item2.name = menu[(u + 1) % 10];
+  item2.price = priceOf((u + 1) % 10);
 
-  item2.price=item2.price-u;
+  item2.price = item2.price - u;
   print('--- Step 1 ---');
   print('Step 1: item1: ${item1.name} Rs: ${item1.price}');
   print('Step 1: item2: ${item2.name} Rs: ${item2.price}');
@@ -91,18 +113,18 @@ void step1() {
 void step2() {
   //task 2.3
   MenuItem a = MenuItem(menu[u], priceOf(u));
-  MenuItem b = MenuItem('Test Special', 15*u);
+  MenuItem b = MenuItem('Test Special', 15 * u);
   print('--- Step 2 ---');
   print('Step 2: ${a.name} Rs ${a.price}');
-  print('Test Special Rs ${b.price}');//final use to set value only once but here we are changing it again if its below the priceFloor so we are using it for that 
+  print('Test Special Rs ${b.price}'); //final use to set value only once but here we are changing it again if its below the priceFloor so we are using it for that
 }
 
 void step3() {
   //task 3.3
   print('--- Step 3 ---');
-  MenuItem freebie = MenuItem.free('Water');//becuase we explicitly calling the named constructor so named constructor logic will run 
-  int i=(u+2)%10;
-  MenuItem parsed=MenuItem.fromString('${menu[i]}:${priceOf(i)}');
+  MenuItem freebie = MenuItem.free('Water'); //becuase we explicitly calling the named constructor so named constructor logic will run
+  int i = (u + 2) % 10;
+  MenuItem parsed = MenuItem.fromString('${menu[i]}:${priceOf(i)}');
   print('Step 3: ${freebie.name} Rs ${freebie.price}');
   print('Step 3: ${parsed.name} Rs ${parsed.price}');
   print('Step 3: floor=${priceFloor} free price=${freebie.price}');
@@ -110,13 +132,13 @@ void step3() {
 
 void step4() {
   //task 4.2
-  OrderLog log1 =OrderLog();
-  OrderLog log2=OrderLog();
-  for(int i=1;i<=u+2;i++){
-    String message='order #${100*t+i}';
-    if(i%2==1){
+  OrderLog log1 = OrderLog();
+  OrderLog log2 = OrderLog();
+  for (int i = 1; i <= u + 2; i++) {
+    String message = 'order #${100 * t + i}';
+    if (i % 2 == 1) {
       log1.add(message);
-    }else{
+    } else {
       log2.add(message);
     }
   }
@@ -124,11 +146,20 @@ void step4() {
   print('Step 4: same object? ${identical(log1, log2)}');
   print('Step 4: entries = ${log1.entries.length}');
   print('Step 4: last = ${log2.entries.last}');
-
 }
 
 void step5() {
+  //task 5.3
   print('--- Step 5 ---');
+  OrderLine order = mainOrder();
+  print('Step 5: ${order.item.name} x${order.qty}');
+  print('Step 5: total=${order.total} tax=${order.tax}');
+   try {
+    OrderLine(order.item, 0);
+    print('Step 5: assert did NOT fire');
+  } on AssertionError {
+    print('Step 5: assert fired');
+  }
 }
 
 void step6() {
