@@ -46,8 +46,21 @@ class MenuItem {
   MenuItem.fromString(String text)
     : name = text.split(':')[0],
       price = int.parse(text.split(':')[1]);
-}
+    
+  //task 8.1
+  @override
+  String toString()=>'$name (Rs $price)';
 
+}
+//task 8.2
+List<MenuItem> buildMenu() {
+  return [
+    for (int k = 0; k < 4; k++)
+      MenuItem.fromString(
+        '${menu[(u + 3 * k) % 10]}:${priceOf((u + 3 * k) % 10)}',
+      ),
+  ];
+}
 //task 4.1
 class OrderLog {
   //_ is used with instance and internal to make them private within the class. bu this they cannot be accessed outside the class
@@ -109,8 +122,8 @@ void main() {
   // step4();
   // step5();
   // step6();
-  step7();
-  // step8();
+  // step7();
+  step8();
   // step9();
   // step10();
 }
@@ -210,7 +223,22 @@ void step7() {
 }
 
 void step8() {
+  //task 8.3
   print('--- Step 8 ---');
+  List<MenuItem> items = buildMenu();
+
+  MenuItem expensive = items.reduce(
+    (a, b) => a.price > b.price ? a : b,
+  );
+
+  int sum = items.fold(
+    0,
+    (total, item) => total + item.price,
+  );
+
+  print('Step 8: menu = $items');
+  print('Step 8: priciest = ${expensive.name}');
+  print('Step 8: sum = $sum');
 }
 
 void step9() {
