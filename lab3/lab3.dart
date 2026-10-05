@@ -121,19 +121,34 @@ List<OrderLine> buildReceipt() {
       OrderLine(items[k], 1 + (t + k) % 4),
   ];
 }
+//task 10.1
+class Coupon {
+static final Map<String, Coupon> _cache = {};
+final String code;
+final int percent;
+final int minSpend;
+// main constructor Coupon(this.code, this.percent):
+// initializer list: minSpend = percent * 70
+// assert that percent is between 1 and 50 (inclusive)
+// factory Coupon.fromCode(String code): return the coupon stored in
+// _cache for this code; if there is none, create Coupon(code, couponPercent),
+// store it, and return it (hint: _cache.putIfAbsent)
+// int discountOn(int amount): if amount >= minSpend return
+// amount * percent ~/ 100, otherwise return 0
+}
 // ===========================================================================
 void main() {
   print('Seed: $seed (t=$t, u=$u)');
   // step1();
   // step2();
   // step3();
-  step4();
+  // step4();
   // step5();
   // step6();
   // step7();
   // step8();
-  step9();
-  // step10();
+  // step9();
+  step10();
 }
 
 void step1() {
