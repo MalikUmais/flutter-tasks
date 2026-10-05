@@ -46,6 +46,18 @@ class MenuItem{
   MenuItem.fromString(String text):name=text.split(':')[0], price=int.parse(text.split(':')[1]);
 
 }
+//task 4.1
+class OrderLog {
+  //_ is used with instance and internal to make them private within the class. bu this they cannot be accessed outside the class 
+static OrderLog? _instance;
+final List<String> entries = [];
+OrderLog._internal(); // private named constructor
+// TODO: factory OrderLog() { ... } // always the same object
+factory OrderLog() {
+    return _instance ??= OrderLog._internal();
+  }
+void add(String msg) => entries.add(msg);
+}
 // ===========================================================================
 void main() {
   print('Seed: $seed (t=$t, u=$u)');
@@ -97,7 +109,22 @@ void step3() {
 }
 
 void step4() {
+  //task 4.2
+  OrderLog log1 =OrderLog();
+  OrderLog log2=OrderLog();
+  for(int i=1;i<=u+2;i++){
+    String message='order #${100*t+i}';
+    if(i%2==1){
+      log1.add(message);
+    }else{
+      log2.add(message);
+    }
+  }
   print('--- Step 4 ---');
+  print('Step 4: same object? ${identical(log1, log2)}');
+  print('Step 4: entries = ${log1.entries.length}');
+  print('Step 4: last = ${log2.entries.last}');
+
 }
 
 void step5() {
