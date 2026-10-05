@@ -71,6 +71,10 @@ class OrderLine{
     : total = item.price * qty,
       tax = (item.price * qty) * taxPercent ~/ 100,//error for using total is because we cant we use it while its not been initialized yet in the initializer list
       assert(qty > 0, 'qty must be positive');
+      //task 6.1
+  int get grand => total + tax;
+  bool get isBigOrder=>grand>bigOrderLimit;
+ String get label=>item.name+' x'+qty.toString();
 
 }
 //task 5.2
@@ -87,12 +91,12 @@ void main() {
   // step2();
   // step3();
   // step4();
-  step5();
+  // step5();
   step6();
-  step7();
-  step8();
-  step9();
-  step10();
+  // step7();
+  // step8();
+  // step9();
+  // step10();
 }
 
 void step1() {
@@ -108,6 +112,7 @@ void step1() {
   print('--- Step 1 ---');
   print('Step 1: item1: ${item1.name} Rs: ${item1.price}');
   print('Step 1: item2: ${item2.name} Rs: ${item2.price}');
+
 }
 
 void step2() {
@@ -163,7 +168,16 @@ void step5() {
 }
 
 void step6() {
+  //task 6.2
   print('--- Step 6 ---');
+  OrderLine order=mainOrder();
+  print('Step 6: grand=${order.grand}');
+  print('Step 6: big order? ${order.isBigOrder} (limit $bigOrderLimit)');
+  print('Step 6: label=${order.label}');
+  //task 6.3
+  // order.grand=5;
+  // this line fails because we dont have setter for that 
+  //we have to add setter for this to make it legal
 }
 
 void step7() {
