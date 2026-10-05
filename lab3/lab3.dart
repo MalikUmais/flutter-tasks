@@ -62,28 +62,44 @@ class OrderLog {
 }
 
 //task 5.1
-class OrderLine{
+class OrderLine {
   final MenuItem item;
   final int qty;
   final int total;
   final int tax;
-  OrderLine(this.item,this.qty)
+  OrderLine(this.item, this.qty)
     : total = item.price * qty,
-      tax = (item.price * qty) * taxPercent ~/ 100,//error for using total is because we cant we use it while its not been initialized yet in the initializer list
+      tax = (item.price * qty) * taxPercent ~/ 100, //error for using total is because we cant we use it while its not been initialized yet in the initializer list
       assert(qty > 0, 'qty must be positive');
-      //task 6.1
+  //task 6.1
   int get grand => total + tax;
-  bool get isBigOrder=>grand>bigOrderLimit;
- String get label=>item.name+' x'+qty.toString();
-
+  bool get isBigOrder => grand > bigOrderLimit;
+  String get label => item.name + ' x' + qty.toString();
 }
+
 //task 5.2
 OrderLine mainOrder() {
-  return OrderLine(
-    MenuItem(menu[u], priceOf(u)),
-    2 + (t + u) % 5,
-  );
+  return OrderLine(MenuItem(menu[u], priceOf(u)), 2 + (t + u) % 5);
 }
+
+//task 7.1
+class StudentCard {
+  final String owner;
+  int _balance; // private backing field
+  StudentCard(this.owner) : _balance = 0;
+  int get balance => _balance;
+  // TODO: set balance(int v) { ... }
+  set balance(int v){//setter can thorw exception instead of silently clamping bad value 
+    if (v < 0) {
+      _balance = 0;
+    } else if (v > balanceCap) {
+      _balance = balanceCap;
+    } else {
+      _balance = v;
+    }
+  }
+}
+
 // ===========================================================================
 void main() {
   print('Seed: $seed (t=$t, u=$u)');
@@ -92,8 +108,8 @@ void main() {
   // step3();
   // step4();
   // step5();
-  step6();
-  // step7();
+  // step6();
+  step7();
   // step8();
   // step9();
   // step10();
@@ -112,7 +128,6 @@ void step1() {
   print('--- Step 1 ---');
   print('Step 1: item1: ${item1.name} Rs: ${item1.price}');
   print('Step 1: item2: ${item2.name} Rs: ${item2.price}');
-
 }
 
 void step2() {
@@ -159,7 +174,7 @@ void step5() {
   OrderLine order = mainOrder();
   print('Step 5: ${order.item.name} x${order.qty}');
   print('Step 5: total=${order.total} tax=${order.tax}');
-   try {
+  try {
     OrderLine(order.item, 0);
     print('Step 5: assert did NOT fire');
   } on AssertionError {
@@ -170,18 +185,28 @@ void step5() {
 void step6() {
   //task 6.2
   print('--- Step 6 ---');
-  OrderLine order=mainOrder();
+  OrderLine order = mainOrder();
   print('Step 6: grand=${order.grand}');
   print('Step 6: big order? ${order.isBigOrder} (limit $bigOrderLimit)');
   print('Step 6: label=${order.label}');
   //task 6.3
   // order.grand=5;
-  // this line fails because we dont have setter for that 
+  // this line fails because we dont have setter for that
   //we have to add setter for this to make it legal
 }
 
 void step7() {
+  //task 7.2
   print('--- Step 7 ---');
+  StudentCard card = StudentCard('S$seed');
+  card.balance=seed*10+50;
+  print('Step 7: topped up->${card.balance}');
+  card.balance=-seed-1;
+  print('Step 7: bad value->${card.balance}');
+  card.balance=balanceCap-u;
+  print('Step 7: reset->${card.balance}');
+  card.balance=card.balance-mainOrder().grand;
+  print('Step 7: paid order->${card.balance}');
 }
 
 void step8() {
