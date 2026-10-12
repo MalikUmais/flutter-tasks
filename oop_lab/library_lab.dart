@@ -32,12 +32,15 @@ final int shelfSize = 3 + u % 4; // items on the shelf in Steps 9-10
 // ===========================================================================
 
 //task1.1
-class LibraryItem {
+//task3.2
+abstract class LibraryItem {
   final String title;
   final int year;
   LibraryItem(this.title, this.year);
   //task2.1
-  String describe()=>'$title ($year)';
+  String describe() => '$title ($year)';
+  //task3.1
+  int lateFee(int days);
 }
 
 //task1.2
@@ -46,22 +49,48 @@ class Book extends LibraryItem {
   Book(super.title, super.year, this.pages);
   //task2.2
   @override
-  String describe()=>'${super.describe()}, $pages pages';
+  String describe() => '${super.describe()}, $pages pages';
+  //task3.2
+  @override
+  int lateFee(int days) => days * feePerDay;
 }
+
 //task2.3
-class Magazine  extends LibraryItem{
+class Magazine extends LibraryItem {
   final int issue;
   Magazine(super.title, super.year, this.issue);
   @override
   String describe() => '${super.describe()}, issue $issue';
+  //task3.2
+  @override
+  int lateFee(int days) => days * (feePerDay ~/ 2);
 }
-Magazine mainMagazine(){
-  int i = (u+1)%10;
-  return Magazine(titles[i],yearOf(i),1+(t+u)%12);
+
+//task3.2
+class Dvd extends LibraryItem {
+  final int minutes;
+  Dvd(super.title, super.year, this.minutes);
+  @override
+  String describe() => '${super.describe()}, $minutes min';
+  @override
+  int lateFee(int days) => days * feePerDay * 2;
 }
+
+//task2.3
+Magazine mainMagazine() {
+  int i = (u + 1) % 10;
+  return Magazine(titles[i], yearOf(i), 1 + (t + u) % 12);
+}
+
 //task1.3
 Book mainBook() {
   return Book(titles[u], yearOf(u), 100 + 3 * seed);
+}
+
+//task3.2
+Dvd mainDvd() {
+  int i = (u + 2) % 10;
+  return Dvd(titles[i], yearOf(i), 90 + seed % 40);
 }
 
 void main() {
@@ -91,13 +120,27 @@ void step1() {
 
 void step2() {
   print('--- Step 2 ---');
-  print('Step 2: ${mainBook().describe()}');//if forget the override it simply called the parent method 
-  print('Step 2: ${mainMagazine().describe()}');// if we named as descibe() it will remain unused as we are not going to call it 
+  print(
+    'Step 2: ${mainBook().describe()}',
+  ); //if forget the override it simply called the parent method
+  print('Step 2: ${mainMagazine().describe()}'); // if we named as descibe() it will remain unused as we are not going to call it
 }
 
 void step3() {
   print('--- Step 3 ---');
+  print(
+    'Step 3: Book late fee for $daysLate days = ${mainBook().lateFee(daysLate)}',
+  );
+  print(
+    'Step 3: Magazine late fee for $daysLate days = ${mainMagazine().lateFee(daysLate)}',
+  );
+  print(
+    'Step 3: Dvd late fee for $daysLate days = ${mainDvd().lateFee(daysLate)}',
+  );
+  // LibraryItem item = LibraryItem('x', 2000);
+  //eror is libraryItem is an abstract class and cannot be instantiated directly. its because abstract class methods are without bodies must be implemented by subclasses.
 }
+
 void step4() {
   print('--- Step 4 ---');
 }
