@@ -128,7 +128,23 @@ class Dvd extends LibraryItem with Renewable{
   @override
   int lateFee(int days) => days * feePerDay * 2;
 }
+//task8.1
+class Fine{
+  final int amount;
+  const Fine(this.amount);
 
+  Fine operator +(Fine o)=>Fine(amount + o.amount);
+  bool operator >(Fine o) => amount > o.amount;
+  @override
+  bool operator ==(Object other) =>
+      other is Fine && other.amount == amount;
+
+  @override
+  int get hashCode => amount.hashCode;
+
+  @override
+  String toString() => 'Fine($amount)';
+}
 //task2.3
 Magazine mainMagazine() {
   int i = (u + 1) % 10;
@@ -248,6 +264,15 @@ void step7() {
 
 void step8() {
   print('--- Step 8 ---');
+  Fine f1=Fine(mainBook().lateFee(daysLate));
+  Fine f2=Fine(mainMagazine().lateFee(daysLate));
+
+  print('Step 8: $f1 + $f2 = ${f1 + f2}');
+  print('Step 8: first bigger? ${f1 > f2}');
+  print('Step 8: equal copies? ${f1 == Fine(f1.amount)}');
+  print('Step 8: set size = ${{f1, Fine(f1.amount), f2}.length}');
+  //without hashCode the set would consider both fines as different objects so size becomes 3
+  //Dart requireif a == b then a.hashCode == b.hashCode otherwise hash-based collections (Set, Map) break.
 }
 
 void step9() {
