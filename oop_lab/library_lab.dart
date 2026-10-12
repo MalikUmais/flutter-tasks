@@ -68,6 +68,20 @@ enum MemberType{
   const MemberType(this.maxLoans, this.discountPercent);
   int applyDiscount(int fee) =>fee-(fee*discountPercent~/100);
 }
+//task7.1
+extension MoneyText on int {
+  String get rs => 'Rs $this';
+}
+
+extension Initials on String {
+  String get initials =>
+      split(' ').map((w) => w.isNotEmpty ? w[0] : '').join();
+}
+
+extension ShelfMath on List<LibraryItem> {
+  int totalLateFee(int days) =>
+      fold(0, (sum, item) => sum + item.lateFee(days));
+}
 //task1.2
 class Book extends LibraryItem with Renewable implements Borrowable {
   final int pages;
@@ -221,6 +235,15 @@ void step6() {
 
 void step7() {
   print('--- Step 7 ---');
+  MemberType type = MemberType.values[seed % 3];
+  int fee = mainBook().lateFee(daysLate);
+  int discounted = type.applyDiscount(fee);
+
+  List<LibraryItem> shelf = [mainBook(), mainMagazine(), mainDvd()];
+
+  print('Step 7: ${discounted.rs}');
+  print('Step 7: initials of "${titles[u]}" = ${titles[u].initials}');
+  print('Step 7: shelf fee for $daysLate days = ${shelf.totalLateFee(daysLate).rs}');
 }
 
 void step8() {
