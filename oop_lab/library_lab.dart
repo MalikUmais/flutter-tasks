@@ -24,6 +24,21 @@ final int renewAttempts = 2 + u;            // renewal attempts made in Step 5
 final int shelfSize = 3 + u % 4;            // items on the shelf in Steps 9-10
 // ===========================================================================
 
+//task1.1
+class LibraryItem{
+  final String title;
+  final int year;
+  LibraryItem(this.title, this.year);
+}
+//task1.2
+class Book extends LibraryItem {
+  final int pages;
+  Book(super.title, super.year, this.pages);
+}
+//task1.3
+Book mainBook(){
+  return Book(titles[u],yearOf(u), 100+3*seed); 
+}
 void main() {
   print('Seed: $seed (t=$t, u=$u)');
   step1();
@@ -38,7 +53,14 @@ void main() {
   step10();
 }
 
-void step1() { print('--- Step 1 ---'); }
+void step1() { print('--- Step 1 ---');
+  Book b = mainBook();
+  LibraryItem item = b;
+  print("Step 1: ${b.title} (${b.year}), ${b.pages} pages");//items.pages gives error because LibraryItem does not have pages property
+  print("Step 1: stored as LibraryItem: ${b.title}");
+  print("Step 1: runtimeType = ${b.runtimeType}");
+  
+ }
 void step2() { print('--- Step 2 ---'); }
 void step3() { print('--- Step 3 ---'); }
 void step4() { print('--- Step 4 ---'); }
