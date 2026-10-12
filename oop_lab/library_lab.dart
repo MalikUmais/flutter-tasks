@@ -42,10 +42,16 @@ abstract class LibraryItem {
   //task3.1
   int lateFee(int days);
 }
-
+//task4.1
+abstract class Borrowable{
+  bool get isAvailable;
+  void borrow();
+  void giveBack();
+}
 //task1.2
-class Book extends LibraryItem {
+class Book extends LibraryItem implements Borrowable {
   final int pages;
+  bool _out=false;
   Book(super.title, super.year, this.pages);
   //task2.2
   @override
@@ -53,6 +59,18 @@ class Book extends LibraryItem {
   //task3.2
   @override
   int lateFee(int days) => days * feePerDay;
+
+  //task4.2
+  @override
+  bool get isAvailable => !_out;
+  @override
+  void borrow(){
+    _out=true;
+  }
+  @override
+  void giveBack(){
+    _out=false;
+  }
 }
 
 //task2.3
@@ -143,6 +161,17 @@ void step3() {
 
 void step4() {
   print('--- Step 4 ---');
+  Book book = mainBook();
+  print('Step 4: available? ${book.isAvailable}');
+  book.borrow();
+  print('Step 4: after borrow? ${book.isAvailable}');
+  book.giveBack();
+  print('Step 4: after return? ${book.isAvailable}');
+  List<LibraryItem> libraryItems = [mainBook(), mainMagazine(), mainDvd()];
+  for (var item in libraryItems) {
+    print('Step 4: ${item.runtimeType} borrowable? ${item is Borrowable}');
+    //extends Borrowable will require us to implement borrow and giveBack in each subclass which is what we did not needed.
+  }
 }
 
 void step5() {
