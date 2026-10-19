@@ -12,8 +12,16 @@ final int t = seed ~/ 10; // tens digit
 final int u = seed % 10; // units digit
 
 const List<String> courses = [
-  'Mobile Dev', 'Data Structures', 'Operating Systems', 'Databases',
-  'Networks', 'Software Eng', 'AI', 'Web Engineering', 'Graphics', 'Security',
+  'Mobile Dev',
+  'Data Structures',
+  'Operating Systems',
+  'Databases',
+  'Networks',
+  'Software Eng',
+  'AI',
+  'Web Engineering',
+  'Graphics',
+  'Security',
 ];
 
 final String course = courses[u]; // your course name
@@ -38,22 +46,54 @@ class LabApp extends StatelessWidget {
     // Step 1 replaces everything below.
     //runApp receives the root widget, which is LabApp and HomePage.
     //MaterialApp recieves the HomePage as its home widget.
-    return MaterialApp(
-      title:'Study Tracker',
-      home:const HomePage(),
-    );
+    return MaterialApp(title: 'Study Tracker', home: const HomePage());
   }
 }
-class HomePage extends StatelessWidget{
+
+class HomePage extends StatelessWidget {
   const HomePage({super.key});
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: Text('Study Tracker: $course')),
-      body: const Center(child: Text('Hello')),
+      body: StudentCard(
+        name: studentName,
+        roll: rollNo,
+        course: course,
+      ),
     );
   }
 }
+
+class StudentCard extends StatelessWidget {
+  //compiler would give error related to immutable fields if we don't declare them as final because widget is immutable.
+  final String name;
+  final String roll;
+  final String course;
+  const StudentCard({
+    super.key,
+    required this.name,
+    required this.roll,
+    required this.course,
+  });
+  @override
+  Widget build(BuildContext context) {
+    return Card(
+      child: Padding(
+        padding: const EdgeInsets.all(16),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text('Name: $name', key: const Key('student-name')),
+            Text('Roll no: $roll', key: const Key('student-roll')),
+            Text('Course: $course', key: const Key('student-course')),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
 // ---- Provided for Step 7. It has a bug on purpose. Do not rename anything.
 class BuggyCounter extends StatefulWidget {
   const BuggyCounter({super.key});
