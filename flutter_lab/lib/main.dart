@@ -237,10 +237,12 @@ class Countdown extends StatefulWidget {
 class _CountdownState extends State<Countdown> {
   late int _left;
   late Timer _timer;
+  int _builds = 0;
 
   @override
   void initState() {
     super.initState();
+    lifecycleLog.add('initState');
     _left = startSeconds;
     _timer = Timer.periodic(const Duration(seconds: 1), (timer) {
       setState(() => _left--);
@@ -250,19 +252,27 @@ class _CountdownState extends State<Countdown> {
 
   @override
   void dispose() {
+    lifecycleLog.add('dispose');
     _timer.cancel();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    // If delete _timer.cancel() from dispose and the widget is removed,
-    // we will get "Looking up a deactivated widget's ancestor is unsafe" or
-    // "setState() called after dispose()" because the Timer keeps firing
-    // and tries to call setState on a State that no longer exists.
-    return Text(
-      _left > 0 ? 'Time left: $_left s' : 'Time is up!',
-      key: const Key('time-left'),
+  _builds++;
+  // It increases by one per second not two because setState is called
+    // only once per timer tick. The timer callback does one setState, which
+    // triggers one rebuild. We can print lifecycleLog in dispose or after the
+    // widget is removedv to prove that dispose was added to the list.
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          _left > 0 ? 'Time left: $_left s' : 'Time is up!',
+          key: const Key('time-left'),
+        ),
+        Text('Builds: $_builds', key: const Key('builds')), 
+      ],
     );
   }
 }
