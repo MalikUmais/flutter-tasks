@@ -72,8 +72,10 @@ class HomePage extends StatelessWidget {
                 Text('Max: $maxCount', key: const Key('info-max')),
               ],
             ),
-            const SizedBox(height: 12),           
+            const SizedBox(height: 12),
             const Tally(),
+            const SizedBox(height: 12),
+            const Countdown(),
             const SizedBox(height: 12),
             const BuggyCounter(),
           ],
@@ -130,10 +132,11 @@ class GoalBanner extends StatelessWidget {
 }
 
 class Tally extends StatefulWidget {
-const Tally({super.key});
-@override
+  const Tally({super.key});
+  @override
   State<Tally> createState() => _TallyState();
 }
+
 class _TallyState extends State<Tally> {
   int _count = startCount;
 
@@ -143,12 +146,14 @@ class _TallyState extends State<Tally> {
       if (_count > maxCount) _count = maxCount;
     });
   }
-  void _minus(){
+
+  void _minus() {
     setState(() {
       _count -= stepSize;
       if (_count < 0) _count = 0;
     });
   }
+
   void _reset() {
     setState(() {
       _count = startCount;
@@ -162,7 +167,7 @@ class _TallyState extends State<Tally> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text('Count: $_count', key: const Key('count')),
-        GoalBanner(count: _count, max: maxCount), 
+        GoalBanner(count: _count, max: maxCount),
         Row(
           children: [
             ElevatedButton(
@@ -188,6 +193,7 @@ class _TallyState extends State<Tally> {
     );
   }
 }
+
 // ---- Provided for Step 7. It has a bug on purpose. Do not rename anything.
 class BuggyCounter extends StatefulWidget {
   const BuggyCounter({super.key});
@@ -198,7 +204,7 @@ class BuggyCounter extends StatefulWidget {
 
 class _BuggyCounterState extends State<BuggyCounter> {
   int _clicks = 0;
-//Before the fix, after tapping three times:
+  //Before the fix, after tapping three times:
   // _clicks inside the State was 6 because bugStep = 2,  0+2+2+2 but the screen showed 0 because setState was missing.
   // Answer 6 and 0
   @override
@@ -217,6 +223,46 @@ class _BuggyCounterState extends State<BuggyCounter> {
           child: Text('+$bugStep'),
         ),
       ],
+    );
+  }
+}
+
+class Countdown extends StatefulWidget {
+  const Countdown({super.key});
+
+  @override
+  State<Countdown> createState() => _CountdownState();
+}
+
+class _CountdownState extends State<Countdown> {
+  late int _left;
+  late Timer _timer;
+
+  @override
+  void initState() {
+    super.initState();
+    _left = startSeconds;
+    _timer = Timer.periodic(const Duration(seconds: 1), (timer) {
+      setState(() => _left--);
+      if (_left <= 0) timer.cancel();
+    });
+  }
+
+  @override
+  void dispose() {
+    _timer.cancel();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    // If delete _timer.cancel() from dispose and the widget is removed,
+    // we will get "Looking up a deactivated widget's ancestor is unsafe" or
+    // "setState() called after dispose()" because the Timer keeps firing
+    // and tries to call setState on a State that no longer exists.
+    return Text(
+      _left > 0 ? 'Time left: $_left s' : 'Time is up!',
+      key: const Key('time-left'),
     );
   }
 }
