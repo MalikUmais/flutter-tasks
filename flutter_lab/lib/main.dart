@@ -72,6 +72,8 @@ class HomePage extends StatelessWidget {
                 Text('Max: $maxCount', key: const Key('info-max')),
               ],
             ),
+            const SizedBox(height: 12),           
+            GoalBanner(count: startCount, max: maxCount),
           ],
         ),
       ),
@@ -104,6 +106,23 @@ class StudentCard extends StatelessWidget {
           ],
         ),
       ),
+    );
+  }
+}
+
+class GoalBanner extends StatelessWidget {
+  final int count;
+  final int max;
+  const GoalBanner({super.key, required this.count, required this.max});
+  @override
+  Widget build(BuildContext context) {
+    //GoalBanner does not need setState because it's a StatelessWidget.
+    // Its output depends only on the values passed to it .
+    // For showing a new count must rebuild it with a new count value
+    final int percent = count * 100 ~/ max;
+    return Text(
+      'Progress: $count of $max ($percent%)',
+      key: const Key('progress'),
     );
   }
 }
