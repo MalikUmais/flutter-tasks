@@ -138,10 +138,24 @@ class _TallyState extends State<Tally> {
   void _plus() {
     setState(() {
       _count += stepSize;
+      if (_count > maxCount) _count = maxCount;
     });
   }
+  void _minus(){
+    setState(() {
+      _count -= stepSize;
+      if (_count < 0) _count = 0;
+    });
+  }
+  void _reset() {
+    setState(() {
+      _count = startCount;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
+    //hot reload will preserver the state while hot restart will reset it. widget is immutable and state is the memory that preserves during rebuilds.
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -153,6 +167,18 @@ class _TallyState extends State<Tally> {
               key: const Key('plus'),
               onPressed: _plus,
               child: Text('+$stepSize'),
+            ),
+            const SizedBox(width: 8),
+            ElevatedButton(
+              key: const Key('minus'),
+              onPressed: _minus,
+              child: Text('-$stepSize'),
+            ),
+            const SizedBox(width: 8),
+            ElevatedButton(
+              key: const Key('reset'),
+              onPressed: _reset,
+              child: Text('Reset'),
             ),
           ],
         ),
