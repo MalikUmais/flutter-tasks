@@ -108,7 +108,10 @@ class HomePage extends StatelessWidget {
           children: [
             const SettingsCard(),
             const SizedBox(height: 12),
+            const Welcome(),
+            const SizedBox(height: 12),
             const Clock(),
+            Row(children: [Tile(tileA), Tile(tileB), Tile(tileC)]),
             // Add each new widget BELOW the previous one, in the order the
             // steps tell you, with a SizedBox(height: 12) between widgets.
           ],
@@ -216,25 +219,66 @@ class _ClockState extends State<Clock> {
     super.dispose();
   }
 }
+
 //task 3.1
 class Probe extends StatelessWidget {
   final int seconds;
-  const Probe({super.key,required this.seconds});
+  const Probe({super.key, required this.seconds});
   //task 3.2
   @override
   Widget build(BuildContext context) {
-  final bool above=context.findAncestorWidgetOfExactType<Scaffold>()!=null;
+    final bool above =
+        context.findAncestorWidgetOfExactType<Scaffold>() != null;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
-      children:[
+      children: [
         Text('Seen at: $seconds s', key: const Key('probe-seen')),
-        Text('Widget #${identityHashCode(this)}', key: const Key('probe-widget')),
-        Text('Element #${identityHashCode(context)}', key: const Key('probe-element')),
-        Text('Context belongs to: ${context.widget.runtimeType}', key: const Key('probe-context')),
+        Text(
+          'Widget #${identityHashCode(this)}',
+          key: const Key('probe-widget'),
+        ),
+        Text(
+          'Element #${identityHashCode(context)}',
+          key: const Key('probe-element'),
+        ),
+        Text(
+          'Context belongs to: ${context.widget.runtimeType}',
+          key: const Key('probe-context'),
+        ),
         Text('Scaffold above me: $above', key: const Key('probe-above')),
-      ]     
+      ],
     );
     //widget is thrown away and cheap while element is persistent and holds the state
     //render object is created by element and is responsible for layout and painting
+  }
+}
+
+//task 4.1
+class Welcome extends StatelessWidget {
+  const Welcome({super.key});
+  @override
+  Widget build(BuildContext context) {
+    return Center(
+      child: Text('Welcome, $studentName', key: const Key('welcome')),
+    );
+  }
+}
+
+//task 4.2
+class Tile extends StatefulWidget {
+  final String label;
+  const Tile(this.label, {super.key});
+  State<Tile> createState() => _TileState();
+}
+//this style is composition
+//flutter prefers it because its more flexible 
+class _TileState extends State<Tile> {
+  int taps = 0;
+  @override
+  Widget build(BuildContext context) {
+    return ElevatedButton(
+      onPressed: () => setState(() => taps++),
+      child: Text('${widget.label}: $taps'),
+    );
   }
 }
