@@ -119,6 +119,8 @@ class HomePage extends StatelessWidget {
             const SummaryRow(),
             const SizedBox(height: 12),
             const ShareRow(),
+            const SizedBox(height: 12),
+            const InfoBox(),
             // Add each new widget BELOW the previous one, in the order the
             // steps tell you, with a SizedBox(height: 12) between widgets.
           ],
@@ -377,7 +379,7 @@ class ShareRow extends StatelessWidget {
     return Row(
       key: const Key('share-row'),
       children: [
-         SizedBox(
+        SizedBox(
           key: const Key('fixed'),
           width: fixedW,
           child: ElevatedButton(onPressed: () {}, child: const Text('F')),
@@ -399,6 +401,27 @@ class ShareRow extends StatelessWidget {
           ),
         ),
       ],
+    );
+  }
+}
+
+class InfoBox extends StatelessWidget {
+  // Padding is inside the border; margin is outside the border.
+  // Use a plain Padding or SizedBox when you only need spacing and do not
+  // need colour, border or borderRadius .
+  const InfoBox({super.key});
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      key: const Key('info-box'),
+      margin: EdgeInsets.all(boxMargin),
+      padding: EdgeInsets.all(boxPad),
+      decoration: BoxDecoration(
+        color: swatches[hue]!.shade100,
+        borderRadius: BorderRadius.circular(boxRadius),
+        border: Border.all(width: boxBorder),
+      ),
+      child: Text('Course: $course', key: const Key('box-text')),
     );
   }
 }
