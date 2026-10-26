@@ -199,6 +199,7 @@ class _ClockState extends State<Clock> {
       children: [
         Text('Session: $_seconds s', key: const Key('clock')),
         Text('Builds: $_builds', key: const Key('builds')),
+        Probe(seconds: _seconds),
       ],
     );
     //initState runs only once when state is created
@@ -213,5 +214,27 @@ class _ClockState extends State<Clock> {
     _timer.cancel();
     lifecycleLog.add('dispose');
     super.dispose();
+  }
+}
+//task 3.1
+class Probe extends StatelessWidget {
+  final int seconds;
+  const Probe({super.key,required this.seconds});
+  //task 3.2
+  @override
+  Widget build(BuildContext context) {
+  final bool above=context.findAncestorWidgetOfExactType<Scaffold>()!=null;
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children:[
+        Text('Seen at: $seconds s', key: const Key('probe-seen')),
+        Text('Widget #${identityHashCode(this)}', key: const Key('probe-widget')),
+        Text('Element #${identityHashCode(context)}', key: const Key('probe-element')),
+        Text('Context belongs to: ${context.widget.runtimeType}', key: const Key('probe-context')),
+        Text('Scaffold above me: $above', key: const Key('probe-above')),
+      ]     
+    );
+    //widget is thrown away and cheap while element is persistent and holds the state
+    //render object is created by element and is responsible for layout and painting
   }
 }
