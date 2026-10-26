@@ -111,7 +111,8 @@ class HomePage extends StatelessWidget {
             const Welcome(),
             const SizedBox(height: 12),
             const Clock(),
-            Row(children: [Tile(tileA), Tile(tileB), Tile(tileC)]),
+            const SizedBox(height: 12),
+            const SwapBoard(),
             // Add each new widget BELOW the previous one, in the order the
             // steps tell you, with a SizedBox(height: 12) between widgets.
           ],
@@ -268,10 +269,12 @@ class Welcome extends StatelessWidget {
 class Tile extends StatefulWidget {
   final String label;
   const Tile(this.label, {super.key});
+  @override
   State<Tile> createState() => _TileState();
 }
+
 //this style is composition
-//flutter prefers it because its more flexible 
+//flutter prefers it because its more flexible
 class _TileState extends State<Tile> {
   int taps = 0;
   @override
@@ -279,6 +282,39 @@ class _TileState extends State<Tile> {
     return ElevatedButton(
       onPressed: () => setState(() => taps++),
       child: Text('${widget.label}: $taps'),
+    );
+  }
+}
+
+//task 5.1
+class SwapBoard extends StatefulWidget {
+  const SwapBoard({super.key});
+  @override
+  State<SwapBoard> createState() => _SwapBoardState();
+}
+// Without keys Flutter matches widgets by type + position.
+// When the list is reversed the Widget instances move, but the Elements
+// stay in the same positions in the tree.
+// Therefore the State stays on the left while only the
+// label (which comes from the Widget) moves.
+class _SwapBoardState extends State<SwapBoard> {
+  var tiles = [
+    Tile(tileA, key: ValueKey(tileA)),
+    Tile(tileB, key: ValueKey(tileB)),
+    Tile(tileC, key: ValueKey(tileC)),
+  ];
+  void swap()=>setState(()=>tiles=tiles.reversed.toList());
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        Row(children: tiles),
+        ElevatedButton(
+          key: const Key('swap'),
+          onPressed: swap,
+          child: const Text('Swap'),
+        ),
+      ]
     );
   }
 }
