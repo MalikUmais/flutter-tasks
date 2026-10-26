@@ -115,6 +115,8 @@ class HomePage extends StatelessWidget {
             const SwapBoard(),
             const SizedBox(height: 12),
             const InfoPanel(),
+            const SizedBox(height: 12),
+            const SummaryRow(),
             // Add each new widget BELOW the previous one, in the order the
             // steps tell you, with a SizedBox(height: 12) between widgets.
           ],
@@ -146,6 +148,9 @@ class SettingsCard extends StatelessWidget {
 }
 
 // ---- Provided for Step 7. It overflows on purpose. Do not rename anything.
+// Expanded tells the Row to give the child a tight width constraint. Constraints go down: the Text now
+// receives a maximum width. Because the Text can no longer be infinitely wide,
+// it wraps its words so that its size fits inside the constraint.
 class SummaryRow extends StatelessWidget {
   const SummaryRow({super.key});
 
@@ -153,17 +158,24 @@ class SummaryRow extends StatelessWidget {
   Widget build(BuildContext context) {
     return Row(
       children: [
-        Text(
-          'Part A: read the widget tree of the $course board from top to bottom.',
-          key: const Key('sum-a'),
+        Expanded(
+          child: Text(
+            'Part A: read the widget tree of the $course board from top to bottom.',
+            key: const Key('sum-a'),
+          ),
         ),
-        Text(
-          'Part B: build each box from small widgets and never extend a built-in class.',
-          key: const Key('sum-b'),
+
+        Expanded(
+          child: Text(
+            'Part B: build each box from small widgets and never extend a built-in class.',
+            key: const Key('sum-b'),
+          ),
         ),
-        Text(
-          'Part C: break the layout on purpose, then fix it with Expanded or Wrap.',
-          key: const Key('sum-c'),
+        Expanded(
+          child: Text(
+            'Part C: break the layout on purpose, then fix it with Expanded or Wrap.',
+            key: const Key('sum-c'),
+          ),
         ),
       ],
     );
