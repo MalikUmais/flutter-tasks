@@ -12,12 +12,25 @@ final int t = seed ~/ 10; // tens digit
 final int u = seed % 10; // units digit
 
 const List<String> courses = [
-  'Mobile Dev', 'Data Structures', 'Operating Systems', 'Databases',
-  'Networks', 'Software Eng', 'AI', 'Web Engineering', 'Graphics', 'Security',
+  'Mobile Dev',
+  'Data Structures',
+  'Operating Systems',
+  'Databases',
+  'Networks',
+  'Software Eng',
+  'AI',
+  'Web Engineering',
+  'Graphics',
+  'Security',
 ];
 const List<String> names = ['Ali', 'Sara', 'Omar', 'Hina', 'Zain', 'Maya'];
 const List<String> mains = [
-  'start', 'center', 'end', 'spaceBetween', 'spaceAround', 'spaceEvenly',
+  'start',
+  'center',
+  'end',
+  'spaceBetween',
+  'spaceAround',
+  'spaceEvenly',
 ];
 const List<String> crosses = ['start', 'center', 'end'];
 const List<String> hues = ['teal', 'indigo', 'orange', 'pink', 'green'];
@@ -151,38 +164,54 @@ class SummaryRow extends StatelessWidget {
   }
 }
 
-
 //task 1.1
 class Clock extends StatefulWidget {
   const Clock({super.key});
   @override
-  State<Clock> createState()=> _ClockState();
-  
+  State<Clock> createState() => _ClockState();
 }
 
-class _ClockState extends State<Clock>{
+class _ClockState extends State<Clock> {
   late Timer _timer;
   int _seconds = startSec;
+  int _builds = 0;
   //task 1.2
   @override
-  void initState(){
+  void initState() {
     super.initState();
-    _timer=Timer.periodic(const Duration(seconds:1), (timer){
-      setState(()=>_seconds+=_timer.tick);
-      if(_seconds >= stopAt) {
+    lifecycleLog.add('initState');
+    _timer = Timer.periodic(const Duration(seconds: 1), (timer) {
+      setState(() => _seconds += tick);
+      if (_seconds >= stopAt) {
         _timer.cancel();
       }
     });
   }
+
   @override
-  Widget build(BuildContext context){
-    return Text(
-      'Session: $_seconds s',
-      key:const Key('clock'),
+  Widget build(BuildContext context) {
+    //task 2.2
+    //each timer tick calls set state once which trigger a rebuild so _builds will increment by 1 for each tick
+    _builds++;
+    //
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text('Session: $_seconds s', key: const Key('clock')),
+        Text('Builds: $_builds', key: const Key('builds')),
+      ],
     );
     //initState runs only once when state is created
-    //build runs every time the state changes 
-    //if timer is started inside build on every build there would be a new timer so multiple timers be firing and 
+    //build runs every time the state changes
+    //if timer is started inside build on every build there would be a new timer so multiple timers be firing and
     //clock would behave incorrectly with multiple timers.
+  }
+
+  //task 2.1
+  @override
+  void dispose() {
+    _timer.cancel();
+    lifecycleLog.add('dispose');
+    super.dispose();
   }
 }
