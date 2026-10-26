@@ -430,10 +430,10 @@ class InfoBox extends StatelessWidget {
 
 class StampStack extends StatelessWidget {
   // The size of a Stack is decided by its non-positioned children
-//  the grey Container. Positioned children are ignored for sizing.
-// If the Icons came first and the Container last, the Stack would shrink
-// to the size of the icons (or become zero-sized) because the Container
-// would be painted on top but would no longer determine the Stack’s size.
+  //  the grey Container. Positioned children are ignored for sizing.
+  // If the Icons came first and the Container last, the Stack would shrink
+  // to the size of the icons (or become zero-sized) because the Container
+  // would be painted on top but would no longer determine the Stack’s size.
   const StampStack({super.key});
   @override
   Widget build(BuildContext context) {
