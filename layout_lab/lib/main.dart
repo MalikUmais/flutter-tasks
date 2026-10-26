@@ -113,6 +113,8 @@ class HomePage extends StatelessWidget {
             const Clock(),
             const SizedBox(height: 12),
             const SwapBoard(),
+            const SizedBox(height: 12),
+            const InfoPanel(),
             // Add each new widget BELOW the previous one, in the order the
             // steps tell you, with a SizedBox(height: 12) between widgets.
           ],
@@ -292,6 +294,7 @@ class SwapBoard extends StatefulWidget {
   @override
   State<SwapBoard> createState() => _SwapBoardState();
 }
+
 // Without keys Flutter matches widgets by type + position.
 // When the list is reversed the Widget instances move, but the Elements
 // stay in the same positions in the tree.
@@ -303,7 +306,7 @@ class _SwapBoardState extends State<SwapBoard> {
     Tile(tileB, key: ValueKey(tileB)),
     Tile(tileC, key: ValueKey(tileC)),
   ];
-  void swap()=>setState(()=>tiles=tiles.reversed.toList());
+  void swap() => setState(() => tiles = tiles.reversed.toList());
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -314,7 +317,41 @@ class _SwapBoardState extends State<SwapBoard> {
           onPressed: swap,
           child: const Text('Swap'),
         ),
-      ]
+      ],
+    );
+  }
+}
+
+class InfoPanel extends StatelessWidget {
+  const InfoPanel({super.key});
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Row(
+          key: const Key('info-row'),
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          children: [
+            Text('Start: $startSec s', key: const Key('row-a')),
+            Text('Tick: $tick s', key: const Key('row-b')),
+            Text('Stop: $stopAt s', key: const Key('row-c')),
+          ],
+        ),
+        const SizedBox(height: 12),
+        // In a Column the main axis is vertical.
+        // The cross axis is horizontal. Therefore crossAxisAlignment controls
+        // left right positioning not up down.
+        Column(
+          key: const Key('info-col'),
+          crossAxisAlignment: CrossAxisAlignment.end,
+          children: [
+            Text('Name: $studentName', key: const Key('col-a')),
+            Text('Roll no: $rollNo', key: const Key('col-b')),
+            Text('Course: $course', key: const Key('col-c')),
+          ],
+        ),
+      ],
     );
   }
 }
